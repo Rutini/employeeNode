@@ -1,6 +1,5 @@
 const dataBase = require('../../dataBase').getInstance();
 const tokenVerificator = require('../../helpers/tokenVerificator');
-const secret = require('../../config/secret');
 
 module.exports = async (req, res) => {
 
@@ -9,9 +8,9 @@ module.exports = async (req, res) => {
 
         const token = req.get('Authorization');
 
-        if (!token) throw new Error('No token!');
+        if (!token) return res.status(401).json({msg: 'Auth token is missed'});
 
-        const {id} = tokenVerificator(token, secret);
+        const {id} = tokenVerificator(token);
         const isUserRegistered = await User.findByPk(id);
 
         if(!isUserRegistered) throw new Error('This user does no registered');
@@ -27,7 +26,7 @@ module.exports = async (req, res) => {
         });
     } catch (e) {
         console.log(e);
-        res.json({
+        res.status(400).json({
             success: false,
             message: e.message
         });

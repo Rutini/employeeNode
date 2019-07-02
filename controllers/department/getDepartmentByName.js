@@ -21,9 +21,10 @@ module.exports = async (req, res) => {
             success: true,
             message: department
         });
+
     } catch (e) {
         console.log(e);
-        res.json({
+        res.status(400).json({
             success: false,
             message: e.message
         });

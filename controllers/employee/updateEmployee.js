@@ -26,13 +26,14 @@ module.exports = async (req, res) => {
             }
         });
 
-        res.json({
+        res.status(201).json({
             success: true,
             message: 'Employee successfully updated'
         });
+
     } catch (e) {
         console.log(e);
-        res.json({
+        res.status(400).json({
             success: false,
             message: e.message
         });

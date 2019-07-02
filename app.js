@@ -1,10 +1,9 @@
 const express = require('express');
 const app = express();
+require('dotenv').config();
 
 const dataBase = require('./dataBase').getInstance();
 dataBase.setModels();
-
-const apiRouter = require('./routes/apiRouter');
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -17,9 +16,14 @@ app.use(function (req, res, next) {
     next();
 });
 
+const apiRouter = require('./routes/apiRouter');
+
 app.use('/api', apiRouter);
 
+app.use('*', (req, res) => {
+    res.status(404).json({msg: 'Not found!'})
+});
+
 app.listen(3000, err => {
-    if (err) console.log(err);
-    else console.log('Listening 3000...');
+    err ? console.log(err) : console.log('Listening on 3000...');
 });

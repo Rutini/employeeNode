@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = (token, secret) => {
+module.exports = (token) => {
 
     let user = null;
 
-    if (!token || !secret) throw new Error('Have not token or secret');
+    if (!token) throw new Error('Token is missed');
 
-    jwt.verify(token, secret, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if(err) throw new Error(err.message);
 
         user = {

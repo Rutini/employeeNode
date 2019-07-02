@@ -11,9 +11,7 @@ module.exports = async (req, res) => {
         if (!userInfo) throw new Error('Body is empty');
 
         const {name, email, password} = userInfo;
-        if (!name || !email || !password) {
-            throw new Error('Some fields are empty');
-        }
+        if (!name || !email || !password) throw new Error('Some fields are empty');
 
         const alreadyExist = await User.findOne({
             where: {
@@ -21,33 +19,26 @@ module.exports = async (req, res) => {
             }
         });
 
-        if (alreadyExist) {
-            res.json({
-                success: false,
-                message: 'This user already exist'
-            });
-            throw new Error('User with this email already exist');
-        }
+        if (alreadyExist) return res.status(409).json({msg: 'This user already exist'});
 
         const saltRounds = 10;
 
-        bcrypt.hash(password, saltRounds, async (err, hash) => {
-            if (err) {
-                console.log(err);
-            } else await User.create({
-                name,
-                email,
-                password: hash
-            });
+        const hash = await bcrypt.hash(password, saltRounds);
+
+        await User.create({
+            name,
+            email,
+            password: hash
         });
 
-        res.json({
+        res.status(201).json({
             success: true,
             message: 'User successfully registered'
         });
+
     } catch (e) {
         console.log(e);
-        res.json({
+        res.status(400).json({
             success: false,
             message: e.message
         });

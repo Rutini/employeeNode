@@ -16,12 +16,13 @@ module.exports = async (req, res) => {
             include: [Department]
         });
 
-        if (!gotEmployees) throw new Error('Employees do not exist');
+        if (!gotEmployees) return res.json(204).json({success: true});
 
         res.json({
             success: true,
             message: gotEmployees
         });
+
     } catch (e) {
         console.log(e);
         res.json({

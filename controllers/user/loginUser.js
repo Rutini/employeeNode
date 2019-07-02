@@ -19,35 +19,21 @@ module.exports = async (req, res) => {
 
         if (!isPresent) throw new Error('User with this email does not exist');
 
-        const correctPassword = await new Promise((resolve, reject) => {
-            bcrypt.compare(password, isPresent.password, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return reject(err);
-                }
-                return resolve(result);
-            });
-        });
-
+        const correctPassword = await bcrypt.compare(password, isPresent.password);
 
         const {id} = isPresent.dataValues;
         const accessToken = tokinazer(id, email);
 
-        if (!correctPassword) {
-            res.json({
-                success: false,
-                message: 'Wrong password'
-            });
-        } else if (correctPassword) {
-            res.json({
-                success: true,
-                message: accessToken
-            });
-        }
+        if (!correctPassword) throw new Error('Wrong password');
+
+        res.json({
+            success: true,
+            message: accessToken
+        });
 
     } catch (e) {
         console.log(e);
-        res.json({
+        res.status(400).json({
             success: false,
             message: e.message
         });
