@@ -7,26 +7,17 @@ module.exports = async (req, res) => {
 
         const name = req.params.name;
 
-        if (!name) throw new Error('Name is bad');
-
-        const department = await Department.findOne({
-            where: {
-                name
-            }
-        });
-
-        if(!department) throw new Error('Department with this name does not exist');
+        const department = await Department.findOne({ where: {name}});
 
         res.json({
-            success: true,
-            message: department
+            msg: 'Department',
+            data: department
         });
 
     } catch (e) {
         console.log(e);
         res.status(400).json({
-            success: false,
-            message: e.message
+            msg: e.message
         });
     }
 };

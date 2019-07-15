@@ -19,15 +19,13 @@ module.exports = async (req, res) => {
         if (!gotEmployees) return res.json(204).json({success: true});
 
         res.json({
-            success: true,
-            message: gotEmployees
+            msg: 'All employees',
+            data: gotEmployees
         });
 
     } catch (e) {
-        console.log(e);
-        res.json({
-            success: false,
-            message: e.message
+        res.status(500).json({
+            msg: e.message
         });
     }
 };

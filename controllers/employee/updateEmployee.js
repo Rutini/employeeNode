@@ -6,15 +6,9 @@ module.exports = async (req, res) => {
 
         const id = req.params.id;
 
-        if (!id) throw new Error('No id');
-
         const employeeInfo = req.body;
 
-        if (!employeeInfo) throw new Error('Body is empty');
-
         const {name, active, department_id} = employeeInfo;
-
-        if (!name || active === undefined || !department_id) throw new Error('Some fields are empty');
 
         await Employee.update({
             name,
@@ -27,15 +21,12 @@ module.exports = async (req, res) => {
         });
 
         res.status(201).json({
-            success: true,
-            message: 'Employee successfully updated'
+            msg: 'Employee successfully updated'
         });
 
     } catch (e) {
-        console.log(e);
         res.status(400).json({
-            success: false,
-            message: e.message
+            msg: e.message
         });
     }
 };

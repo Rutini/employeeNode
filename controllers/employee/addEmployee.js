@@ -6,11 +6,7 @@ module.exports = async (req, res) => {
 
         const employeeInfo = req.body;
 
-        if (!employeeInfo) throw new Error('Body is empty');
-
         const {name, active, department_id} = employeeInfo;
-
-        if (!name || !active || !department_id) throw new Error('Some fields are empty');
 
         await Employee.create({
             name,
@@ -19,15 +15,12 @@ module.exports = async (req, res) => {
         });
 
         res.status(201).json({
-            success: true,
-            message: 'Employee successfully inserted'
+            msg: 'Employee successfully inserted'
         });
 
     } catch (e) {
-        console.log(e);
         res.status(400).json({
-            success: false,
-            message: e.message
+            msg: e.message
         });
     }
 };

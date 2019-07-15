@@ -1,6 +1,7 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
-    const Department = sequelize.define('Department', {
+    return sequelize.define('Department', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -15,5 +16,4 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: false
         }
     );
-    return Department;
 };

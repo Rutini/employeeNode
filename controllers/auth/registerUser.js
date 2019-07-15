@@ -8,18 +8,7 @@ module.exports = async (req, res) => {
 
         const userInfo = req.body;
 
-        if (!userInfo) throw new Error('Body is empty');
-
         const {name, email, password} = userInfo;
-        if (!name || !email || !password) throw new Error('Some fields are empty');
-
-        const alreadyExist = await User.findOne({
-            where: {
-                email
-            }
-        });
-
-        if (alreadyExist) return res.status(409).json({msg: 'This user already exist'});
 
         const saltRounds = 10;
 
@@ -32,15 +21,12 @@ module.exports = async (req, res) => {
         });
 
         res.status(201).json({
-            success: true,
-            message: 'User successfully registered'
+            msg: 'User successfully registered'
         });
 
     } catch (e) {
-        console.log(e);
         res.status(400).json({
-            success: false,
-            message: e.message
+            msg: e.message
         });
     }
 };

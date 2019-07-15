@@ -1,22 +1,33 @@
 const dataBase = require('../../dataBase').getInstance();
 const tokenVerificator = require('../../helpers/tokenVerificator');
+const bcrypt = require('bcrypt');
 
 module.exports = async (req, res) => {
-
     try {
         const User = dataBase.getModel('User');
+
+        const {newPassword} = req.body;
 
         const token = req.get('Authorization');
 
         const {id} = tokenVerificator(token);
-        const user = await User.findByPk(id);
+
+        const saltRounds = 10;
+        const hash = await bcrypt.hash(newPassword, saltRounds);
+
+        await User.update({
+            password: hash
+        }, {
+            where: {
+                id
+            }
+        });
 
         res.json({
-            msg: 'User',
-            data: user
+            msg: 'Password successfully changed'
         });
+
     } catch (e) {
-        console.log(e);
         res.status(400).json({
             msg: e.message
         });

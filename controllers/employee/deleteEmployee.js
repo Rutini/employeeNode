@@ -6,24 +6,13 @@ module.exports = async (req, res) => {
 
         const id = req.params.id;
 
-        if (!id) throw new Error('No id');
+        await Employee.destroy({where: {id}});
 
-        await Employee.destroy({
-            where: {
-                id
-            }
-        });
-
-        res.status(204).json({
-            success: true,
-            message: 'Employee successfully deleted'
-        });
+        res.status(204).json();
 
     } catch (e) {
-        console.log(e);
-        res.status(400).json({
-            success: false,
-            message: e.message
+        res.status(500).json({
+            msg: e.message
         });
     }
 };

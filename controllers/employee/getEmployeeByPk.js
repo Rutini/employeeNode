@@ -8,7 +8,6 @@ module.exports = async (req, res) => {
 
         const id = req.params.id;
 
-        if (!id) throw new Error('No id');
 
         const gotEmployee = await Employee.findOne({
             where: {
@@ -17,18 +16,14 @@ module.exports = async (req, res) => {
             include: [Department]
         });
 
-        if (!gotEmployee) throw new Error('Employee with this id does not exist');
-
         res.json({
-            success: true,
-            message: gotEmployee
+            msg: 'Employee',
+            data: gotEmployee
         });
 
     } catch (e) {
-        console.log(e);
         res.status(400).json({
-            success: false,
-            message: e.message
+            msg: e.message
         });
     }
 };

@@ -6,10 +6,11 @@ module.exports = (() => {
     let instance;
 
     function initConnection() {
-        let client = new Sequelize('employee', 'root', '', {
-            host: 'localhost',
-            dialect: 'mysql',
+        let client = new Sequelize(process.env.DATABASE, process.env.USERNAME, process.env.PASSWORD, {
+            host: process.env.HOST,
+            dialect: process.env.DIALECT,
             operatorsAliases: false,
+            logging: false
         });
         let models = {};
 
