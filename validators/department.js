@@ -1,12 +1,11 @@
 const {param} = require('express-validator/check');
-const dataBase = require('./../dataBase').getInstance();
 const validator = require('./../validators/validator');
 
 module.exports.getOne = [
     param('name').custom(async (name, {req}) => {
         if (!name) throw new Error('Name is missed');
 
-        const Department = dataBase.getModel('Department');
+        const {departments: Department} = require('../models');
         const department = !!await Department.findOne({ where: {name} });
 
         if (!department) {

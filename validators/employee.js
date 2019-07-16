@@ -1,12 +1,11 @@
 const {check, param} = require('express-validator/check');
-const dataBase = require('./../dataBase').getInstance();
 const validator = require('./../validators/validator');
 
 module.exports.getOne = [
     param('id').custom(async (id, {req}) => {
         if (!id) throw new Error('Id is missed');
 
-        const Employee = dataBase.getModel('Employee');
+        const {employees: Employee} = require('../models');
         const employee = !!await Employee.findByPk(id);
 
         if (!employee) {
@@ -24,7 +23,7 @@ module.exports.createOrUpdate = [
     check('active', 'Field active is required').isBoolean(),
     check('department_id', 'Field role is required').isNumeric(),
     check('department_id',).custom(async (department_id, {req}) => {
-        const Department = dataBase.getModel('Department');
+        const {departments: Department} = require('../models');
         const department = !!await Department.findByPk(department_id);
 
         if (!department) {

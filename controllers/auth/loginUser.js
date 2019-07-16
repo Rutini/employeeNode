@@ -1,11 +1,9 @@
-const dataBase = require('../../dataBase').getInstance();
+const {users: User} = require('../../models');
 const tokinazer = require('../../helpers/tokinazer');
 
 module.exports = async (req, res) => {
 
     try {
-        const User = dataBase.getModel('User');
-
         const {email} = req.body;
 
         const user = await User.findOne({

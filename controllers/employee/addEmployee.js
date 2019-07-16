@@ -1,9 +1,6 @@
-const dataBase = require('../../dataBase').getInstance();
-
+const {employees: Employee} = require('../../models');
 module.exports = async (req, res) => {
     try {
-        const Employee = dataBase.getModel('Employee');
-
         const employeeInfo = req.body;
 
         const {name, active, department_id} = employeeInfo;

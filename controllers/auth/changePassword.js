@@ -1,11 +1,9 @@
-const dataBase = require('../../dataBase').getInstance();
+const {users: User} = require('../../models');
 const tokenVerificator = require('../../helpers/tokenVerificator');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 module.exports = async (req, res) => {
     try {
-        const User = dataBase.getModel('User');
-
         const {newPassword} = req.body;
 
         const token = req.get('Authorization');

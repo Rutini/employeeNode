@@ -1,10 +1,8 @@
-const dataBase = require('../../dataBase').getInstance();
+const {departments: Department} = require('../../models');
 
 module.exports = async (req, res) => {
 
     try {
-        const Department = dataBase.getModel('Department');
-
         const name = req.params.name;
 
         const department = await Department.findOne({ where: {name}});

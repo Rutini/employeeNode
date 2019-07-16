@@ -1,7 +1,6 @@
 const {check, header} = require('express-validator/check');
-const dataBase = require('./../dataBase').getInstance();
 const validator = require('./../validators/validator');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const tokenVerificator = require('../helpers/tokenVerificator');
 
 module.exports.register = [
@@ -11,7 +10,7 @@ module.exports.register = [
     check('email', 'Field email is required.').trim().exists(),
     check('email', 'Field email wrong type.').isEmail(),
     check('email').custom(async email => {
-        const User = dataBase.getModel('User');
+        const {users: User} = require('../models');
         const user = !!await User.findOne({ where: { email }});
         if (user) {
             req.status = 409;
@@ -28,21 +27,21 @@ module.exports.register = [
         .custom((value, {req}) => {
             return value === req.body.confirm_password;
         }),
-    validator.validate
+    validator
 ];
 
 module.exports.login = [
     check('email', 'Field email is required').trim().exists(),
     check('email', 'Email\'s type invalid').isEmail(),
     check('email').custom(async email => {
-        const User = dataBase.getModel('User');
+        const {users: User} = require('../models');
         const user = !!await User.findOne({ where: {email}});
         if (!user) throw new Error('Invalid email');
     }),
     check('password', 'Field password is required').exists().isString(),
     check('password', 'Field password min length is 6.').isLength({ min: 6 }),
     check('password').custom(async (password, {req}) => {
-        const User = dataBase.getModel('User');
+        const {users: User} = require('../models');
         const email = req.body.email;
         const user = await User.findOne({ where: { email }});
         const {password: hash} = user;
@@ -56,7 +55,7 @@ module.exports.forgotPassword = [
     check('email', 'Field email is required').trim().exists(),
     check('email', 'Email\'s type invalid').isEmail(),
     check('email').custom(async email => {
-        const User = dataBase.getModel('User');
+        const {users: User} = require('../models');
         const user = !!await User.findOne({ where: { email }});
         if (!user) throw new Error('Invalid email');
     }),
@@ -65,7 +64,7 @@ module.exports.forgotPassword = [
 
 module.exports.changePassword = [
     header('Authorization').custom(async token => {
-        const User = dataBase.getModel('User');
+        const {users: User} = require('../models');
         const {id} = tokenVerificator(token);
         const isRegistered = await User.findByPk(id);
         if (!isRegistered) throw new Error('User is not defined');
@@ -85,7 +84,7 @@ module.exports.changeForgotPassword = [
     check('email', 'Field email is required').trim().exists(),
     check('email', 'Email\'s type invalid').isEmail(),
     check('email').custom(async email => {
-        const User = dataBase.getModel('User');
+        const {users: User} = require('../models');
         const user = !!await User.findOne({ where: {email}});
         if (!user) throw new Error('Invalid email');
     }),

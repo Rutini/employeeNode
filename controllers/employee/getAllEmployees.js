@@ -1,11 +1,8 @@
-const dataBase = require('../../dataBase').getInstance();
+const {employees: Employee, departments: Department} = require('../../models');
 
 module.exports = async (req, res) => {
 
     try {
-        const Employee = dataBase.getModel('Employee');
-        const Department = dataBase.getModel('Department');
-
         const gotEmployees = await Employee.findAll({
             attributes: [
                 'id',

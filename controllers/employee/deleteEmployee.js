@@ -1,9 +1,7 @@
-const dataBase = require('../../dataBase').getInstance();
+const {employees: Employee} = require('../../models');
 
 module.exports = async (req, res) => {
     try {
-        const Employee = dataBase.getModel('Employee');
-
         const id = req.params.id;
 
         await Employee.destroy({where: {id}});

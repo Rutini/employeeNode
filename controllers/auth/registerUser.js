@@ -1,11 +1,9 @@
-const dataBase = require('../../dataBase').getInstance();
-const bcrypt = require('bcrypt');
+const {users: User} = require('../../models');
+const bcrypt = require('bcryptjs');
 
 module.exports = async (req, res) => {
 
     try {
-        const User = dataBase.getModel('User');
-
         const userInfo = req.body;
 
         const {name, email, password} = userInfo;
